@@ -1,18 +1,19 @@
-function Card(){
+import styles from './Card.module.scss';
 
-    return(
-        <div className="card">
-            <div className="favorite">
+function Card(props) {
+    return (
+        <div className={styles.card}>
+            <div className={styles.favorite}>
                 <img src="images/unliked-heart.svg"/>
             </div>
-            <img width={133} height={112} src="images/sneakers/1.jpg"/>
-            <h5>Кроссовки Nike Air Jordan Зеленый</h5>
+            <img width={133} height={112} src={props.img}/>
+            <h5>{props.title}</h5>
             <div className="d-flex justify-between align-center">
                 <div className=" d-flex flex-column ">
                     <span>Цена:</span>
-                    <b>12 999 Руб.</b>
+                    <b>{props.price} руб.</b>
                 </div>
-                <button className="button">
+                <button className="button" onClick={props.onClick}>
                     <img width={11} height={11} src="images/plus.svg"/>
                 </button>
             </div>

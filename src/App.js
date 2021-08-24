@@ -1,6 +1,28 @@
-import Card from './components/Card'
-import Cart from './components/Cart'
+import Card from './components/Card/'
+import Cart from './components/Cart/'
 import Header from './components/Header'
+const sneakers = [
+    {
+        name: 'Кроссовки Nike Air Jordan Зеленый',
+        price: 12999,
+        img:'./images/sneakers/1.jpg'
+    },
+    {
+        name: 'Кроссовки Nike Air Jordan Белый',
+        price: 11900,
+        img:'./images/sneakers/2.jpg'
+    },
+    {
+        name: 'Кроссовки Nike Air Jordan Красный',
+        price: 10990,
+        img:'./images/sneakers/3.jpg'
+    },
+    {
+        name: 'Кроссовки Nike Air Jordan Синий',
+        price: 12390,
+        img:'./images/sneakers/4.jpg'
+    }
+];
 
 function App() {
     return (
@@ -17,12 +39,18 @@ function App() {
                         <input placeholder="Поиск"/>
                     </div>
                 </div>
-                {/*Карточки*/}
+                {/*Карточки */}
                 <div className="d-flex">
-                    <Card/>
-                    <Card/>
-                    <Card/>
-                    <Card/>
+                    {
+                        sneakers.map(item => (
+                            <Card
+                                title={item.name}
+                                price={item.price}
+                                img={item.img}
+                                onClick={() => alert(item.name)}
+                            />
+                        ))
+                    }
                 </div>
             </div>
         </div>
