@@ -1,6 +1,14 @@
 import styles from './Card.module.scss';
+import React from 'react';
 
 function Card(props) {
+
+    const [isAdded, setIsAdded] = React.useState(false)
+    
+    const onClickPlus = () => {
+        setIsAdded(!isAdded)
+    }
+    
     return (
         <div className={styles.card}>
             <div className={styles.favorite}>
@@ -13,9 +21,7 @@ function Card(props) {
                     <span>Цена:</span>
                     <b>{props.price} руб.</b>
                 </div>
-                <button className="button" onClick={props.onClickPlus}>
-                    <img width={11} height={11} src="images/plus.svg"/>
-                </button>
+                <img onClick={onClickPlus} style={{cursor: "pointer"}} src={isAdded ? "images/added.svg" : "images/plus.svg"}/>
             </div>
         </div>
     )

@@ -1,3 +1,4 @@
+import React from 'react'
 import Card from './components/Card/'
 import Cart from './components/Cart/'
 import Header from './components/Header'
