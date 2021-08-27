@@ -1,12 +1,12 @@
 import styles from './Cart.module.scss'
 
 
-function Cart() {
+function Cart(props) {
     return (
         <div className={styles.overlay}>
             <div className={styles.cart}>
                 <h2 className={"mb-30 d-flex justify-between"}>Корзина <img className={styles.deleteItem}
-                                                                            src="images/deleteCart.svg"/></h2>
+                                                                            src="images/deleteCart.svg" onClick={props.onClickClose}/></h2>
                 <div className={styles.Items}>
                     <div className={styles.cartItem}>
                         <img className="mr-20" width={133} height={112} src="images/sneakers/1.jpg"/>

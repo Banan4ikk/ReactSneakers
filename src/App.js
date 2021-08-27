@@ -2,37 +2,26 @@ import React from 'react'
 import Card from './components/Card/'
 import Cart from './components/Cart/'
 import Header from './components/Header'
-
-const sneakers = [
-    {
-        name: 'Кроссовки Nike Air Jordan Зеленый',
-        price: 12999,
-        img: './images/sneakers/1.jpg'
-    },
-    {
-        name: 'Кроссовки Nike Air Jordan Белый',
-        price: 11900,
-        img: './images/sneakers/2.jpg'
-    },
-    {
-        name: 'Кроссовки Nike Air Jordan Красный',
-        price: 10990,
-        img: './images/sneakers/3.jpg'
-    },
-    {
-        name: 'Кроссовки Nike Air Jordan Синий',
-        price: 12390,
-        img: './images/sneakers/4.jpg'
-    }
-];
+import axios from "axios";
 
 function App() {
+    const [items, setItems] = React.useState([]);
+    const [cartOpened, setCartOpened] = React.useState(false);
+
+    React.useEffect(() => {
+        axios.get('https://6128cd040e3482001777b180.mockapi.io/items').then(res => {
+            setItems(res.data);
+        })
+    }, []);
     return (
         <div className="wrapper clear">
-            {/*Корзина*/}
-            {/*<Cart/>*/}
-            {/*Корзина конец*/}
-            <Header/>
+            {cartOpened && <Cart
+                onClickClose={() => {
+                    setCartOpened(false)
+                }}/>}
+            <Header onClickCart={() => {
+                setCartOpened(true)
+            }}/>
             <div className="content p-40">
                 <div className="d-flex align-center justify-between mb-40">
                     <h1>Все кроссовки</h1>
@@ -41,10 +30,9 @@ function App() {
                         <input placeholder="Поиск"/>
                     </div>
                 </div>
-                {/*Карточки */}
-                <div className="d-flex">
+                <div className="d-flex flex-wrap">
                     {
-                        sneakers.map(item => (
+                        items.map(item => (
                             <Card
                                 title={item.name}
                                 price={item.price}
