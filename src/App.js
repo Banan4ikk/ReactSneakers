@@ -6,7 +6,11 @@ import axios from "axios";
 
 function App() {
     const [items, setItems] = React.useState([]);
+    const [cartItems, setCartItems] = React.useState([]);
     const [cartOpened, setCartOpened] = React.useState(false);
+    const onAdd = (obj) => {
+        setCartItems(prev => [...prev, obj]);
+    }
 
     React.useEffect(() => {
         axios.get('https://6128cd040e3482001777b180.mockapi.io/items').then(res => {
@@ -18,7 +22,9 @@ function App() {
             {cartOpened && <Cart
                 onClickClose={() => {
                     setCartOpened(false)
-                }}/>}
+                }}
+                items={cartItems}
+            />}
             <Header onClickCart={() => {
                 setCartOpened(true)
             }}/>
@@ -37,8 +43,8 @@ function App() {
                                 title={item.name}
                                 price={item.price}
                                 img={item.img}
-                                onClickPlus={() => alert("Добавлено в корзину")}
                                 onClickFavorite={() => alert("Добавлено в любимое")}
+                                onPlus={(obj) => onAdd(obj)}
                             />
                         ))
                     }

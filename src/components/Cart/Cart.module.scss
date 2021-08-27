@@ -16,6 +16,7 @@
     box-shadow: -10px 4px 24px rgba(0, 0, 0, 0.1);
     padding: 30px;
     height: 100%;
+    width: 490px;
 
     .Items {
       flex: 1;
@@ -39,9 +40,8 @@
     }
 
     .cardTotalBlock {
-      ul {
+      ul{
         margin-bottom: 40px !important;
-
         li {
           display: flex;
           align-items: flex-end;
