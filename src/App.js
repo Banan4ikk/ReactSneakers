@@ -8,6 +8,7 @@ function App() {
     const [items, setItems] = React.useState([]);
     const [cartItems, setCartItems] = React.useState([]);
     const [cartOpened, setCartOpened] = React.useState(false);
+    const [price, setPrice] = React.useState(0);
     const onAdd = (obj) => {
         setCartItems(prev => [...prev, obj]);
     }
@@ -25,9 +26,12 @@ function App() {
                 }}
                 items={cartItems}
             />}
-            <Header onClickCart={() => {
-                setCartOpened(true)
-            }}/>
+            <Header
+                onClickCart={() => {
+                    setCartOpened(true);
+                }}
+                totalPriceHeader={price}
+            />
             <div className="content p-40">
                 <div className="d-flex align-center justify-between mb-40">
                     <h1>Все кроссовки</h1>
@@ -43,8 +47,12 @@ function App() {
                                 title={item.name}
                                 price={item.price}
                                 img={item.img}
+                                oldPrice={price}
                                 onClickFavorite={() => alert("Добавлено в любимое")}
                                 onPlus={(obj) => onAdd(obj)}
+                                setTotalPrice={(price) => {
+                                    setPrice(price)
+                                }}
                             />
                         ))
                     }

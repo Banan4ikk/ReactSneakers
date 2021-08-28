@@ -40,7 +40,7 @@ function Cart({onClickClose, items = []}) {
                         <li>
                             <span>Налог 5%</span>
                             <div></div>
-                            <b>{totalPrice / 100 * 5} руб.</b>
+                            <b>{Math.round(totalPrice / 100 * 5)} руб.</b>
                         </li>
                     </ul>
                     <button className={styles.greenButton}>Оформить заказ <img src={"images/arrow.svg"}/></button>
