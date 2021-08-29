@@ -15,13 +15,13 @@ function Cart({onClickClose, items = [], onRemove}) {
                 {
                     items.length > 0 ?
                         <div className="RELATIVE">
-                            <div className={styles.Items}>
+                            <div className={styles.Items} style={{flex: 1}}>
                                 {
                                     items.map(item => (
                                             <div className={styles.cartItem}>
                                                 <img className="mr-20" width={133} height={112} src={item.img}/>
                                                 <div className="mr-20">
-                                                    <p className="sneakers-info mb-5">{item.title}</p>
+                                                    <p className="sneakers-info mb-5">{item.name}</p>
                                                     <b>{item.price} Руб.</b>
                                                 </div>
                                                 <img className={styles.deleteItem} onClick={() => onRemove(item)} src="images/deleteCart.svg"/>

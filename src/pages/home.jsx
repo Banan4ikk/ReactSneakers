@@ -16,17 +16,17 @@ function Home({searchValue, setSearchValue, onChangeSearchInput, items, price, o
             </div>
             <div className="d-flex flex-wrap">
                 {
-                    items.map(item => (
-                        <Card
-                            title={item.name}
-                            price={item.price}
-                            img={item.img}
-                            oldPrice={price}
-                            onFavorite={(obj) => onAddToFavorite(obj)}
-                            onPlus={(obj) => onAdd(obj)}
-                            setTotalPrice={(price) => setPrice(price)}
-                        />
-                    ))
+                    items.filter((item) => item.name.toLowerCase().includes(searchValue.toLowerCase()))
+                        .map(item => (
+                            <Card
+                                key = {item.id}
+                                oldPrice={price}
+                                onFavorite={(obj) => onAddToFavorite(obj)}
+                                onPlus={(obj) => onAdd(obj)}
+                                setTotalPrice={(price) => setPrice(price)}
+                                {...item}
+                            />
+                        ))
                 }
             </div>
         </div>
