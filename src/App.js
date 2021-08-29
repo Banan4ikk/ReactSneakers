@@ -16,16 +16,16 @@ function App() {
     const [searchValue, setSearchValue] = React.useState('');
 
     const onAdd = (obj) => {
-        axios.post('http://localhost:3002/cart', obj);
+        axios.post('https://6128cd040e3482001777b180.mockapi.io/Cart', obj);
         setCartItems(prev => [...prev, obj]);
     }
     const onAddToFavorite = async (obj) => {
         try{
             if (favorites.find(favItem => favItem.id === obj.id)) {
-                await axios.delete('http://localhost:3001/favorite/' + obj.id);
+                await axios.delete('https://6128cd040e3482001777b180.mockapi.io/Favorite/' + obj.id);
                 setFavorites(prev => prev.filter(item => item.id !== obj.id));
             } else {
-                const {data} = await axios.post('http://localhost:3001/favorite', obj);
+                const {data} = await axios.post('https://6128cd040e3482001777b180.mockapi.io/Favorite', obj);
                 setFavorites(prev => [...prev, data]);
             }
         }catch (error){
@@ -34,22 +34,22 @@ function App() {
     }
 
     const onRemoveItem = (obj) => {
-        axios.delete('http://localhost:3002/cart/' + obj.id);
+        axios.delete('https://6128cd040e3482001777b180.mockapi.io/Cart/' + obj.id);
         setCartItems(prev => prev.filter(item => item.id !== obj.id));
         setPrice(price - obj.price)
     }
 
     React.useEffect(() => {
-        axios.get('http://localhost:3000/sneakers').then(res => {
+        axios.get('https://6128cd040e3482001777b180.mockapi.io/items').then(res => {
             setItems(res.data)
         });
-        axios.get('http://localhost:3002/cart').then(res => {
+        axios.get('https://6128cd040e3482001777b180.mockapi.io/Cart').then(res => {
             setCartItems(res.data);
             // eslint-disable-next-line react-hooks/exhaustive-deps
             res.data.map(item => totalPriceFromServer += item.price)
             setPrice(totalPriceFromServer);
         });
-        axios.get('http://localhost:3001/favorite').then(res => {
+        axios.get('https://6128cd040e3482001777b180.mockapi.io/Favorite').then(res => {
             setFavorites(res.data);
         })
     }, []);
