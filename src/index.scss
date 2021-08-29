@@ -42,6 +42,15 @@ header {
   border: 1px solid #f3f3f3;
   border-radius: 10px;
   padding: 0 15px;
+  position: relative;
+
+  .clear {
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    top: 12px;
+    right: 15px;
+  }
 
   input {
     border: 0;
@@ -72,6 +81,7 @@ header {
   box-shadow: -10px 4px 24px rgba(0, 0, 0, 0.1);
   padding: 30px;
   height: 100%;
+
   .Items {
     flex: 1;
     overflow: auto;

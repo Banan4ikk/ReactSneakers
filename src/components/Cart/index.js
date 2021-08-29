@@ -1,50 +1,63 @@
 import styles from './Cart.module.scss'
 
 
-function Cart({onClickClose, items = []}) {
+function Cart({onClickClose, items = [], onRemove}) {
     let totalPrice = 0;
 
-    items.map(item => {
-        totalPrice += item.price;
-    });
+    items.length > 0 ? items.map(item => totalPrice += item.price) : totalPrice = 0;
 
     return (
-        <div className={styles.overlay}>
+        <div className={styles.overlay} style={{position: "fixed"}}>
             <div className={styles.cart}>
                 <h2 className={"mb-30 d-flex justify-between"}>Корзина <img className={styles.deleteItem}
                                                                             src="images/deleteCart.svg"
                                                                             onClick={onClickClose}/></h2>
-                <div className={styles.Items}>
-                    {
-                        items.map(item => (
-                                <div className={styles.cartItem}>
-                                    <img className="mr-20" width={133} height={112} src={item.img}/>
-                                    <div className="mr-20">
-                                        <p className="sneakers-info mb-5">{item.title}</p>
-                                        <b>{item.price} Руб.</b>
-                                    </div>
-                                    <img className={styles.deleteItem} src="images/deleteCart.svg"/>
-                                </div>
-                            )
-                        )
-                    }
-                </div>
-
-                <div className={styles.cardTotalBlock}>
-                    <ul>
-                        <li>
-                            <span>Итого</span>
-                            <div></div>
-                            <b>{totalPrice} руб.</b>
-                        </li>
-                        <li>
-                            <span>Налог 5%</span>
-                            <div></div>
-                            <b>{Math.round(totalPrice / 100 * 5)} руб.</b>
-                        </li>
-                    </ul>
-                    <button className={styles.greenButton}>Оформить заказ <img src={"images/arrow.svg"}/></button>
-                </div>
+                {
+                    items.length > 0 ?
+                        <div className="RELATIVE">
+                            <div className={styles.Items}>
+                                {
+                                    items.map(item => (
+                                            <div className={styles.cartItem}>
+                                                <img className="mr-20" width={133} height={112} src={item.img}/>
+                                                <div className="mr-20">
+                                                    <p className="sneakers-info mb-5">{item.title}</p>
+                                                    <b>{item.price} Руб.</b>
+                                                </div>
+                                                <img className={styles.deleteItem} onClick={() => onRemove(item)} src="images/deleteCart.svg"/>
+                                            </div>
+                                        )
+                                    )
+                                }
+                            </div>
+                            <div className={styles.cardTotalBlock}>
+                                <ul>
+                                    <li>
+                                        <span>Итого</span>
+                                        <div></div>
+                                        <b>{totalPrice} руб.</b>
+                                    </li>
+                                    <li>
+                                        <span>Налог 5%</span>
+                                        <div></div>
+                                        <b>{Math.round(totalPrice / 100 * 5)} руб.</b>
+                                    </li>
+                                </ul>
+                                <button className={styles.greenButton}>Оформить заказ <img src={"images/arrow.svg"}/>
+                                </button>
+                            </div>
+                        </div>
+                        :
+                        <div className={styles.cartEmpty}>
+                            <img className="mb-20" src="./images/empty-cart.jpg" style={{width: 120, height: 120}}/>
+                            <h2> Коризна пустая</h2>
+                            <p className="opacity-6"> Добавьте хотя бы одну пару кроссовок чтобы сделать заказ</p>
+                            <button className={styles.greenButton} onClick={onClickClose}>
+                                <img src="./images/arrow.svg" alt="arrow"/>
+                                Вернуться назад
+                            </button>
+                        </div>
+                }
             </div>
         </div>
     )
