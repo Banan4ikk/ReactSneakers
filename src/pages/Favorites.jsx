@@ -13,10 +13,8 @@ function Favorites({items, price, onAddToFavorite, onAdd, setPrice}) {
                     items.map(item => (
                         <Card
                             key = {item.id}
-                            oldPrice={price}
                             onFavorite={(obj) => onAddToFavorite(obj)}
                             onPlus={(obj) => onAdd(obj)}
-                            setTotalPrice={(price) => setPrice(price)}
                             favorite={true}
                             {...item}
                         />

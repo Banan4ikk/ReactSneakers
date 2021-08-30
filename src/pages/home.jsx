@@ -1,7 +1,7 @@
 import Card from "../components/Card";
 import React from "react";
 
-function Home({searchValue, setSearchValue, onChangeSearchInput, items, price, onAddToFavorite, onAdd, getCartPrice}) {
+function Home({searchValue, setSearchValue, onChangeSearchInput, items, onAddToFavorite, onAdd, getCartPrice}) {
     return (
         <div className="content p-40">
             <div className="d-flex align-center justify-between mb-40">
@@ -20,10 +20,9 @@ function Home({searchValue, setSearchValue, onChangeSearchInput, items, price, o
                         .map(item => (
                             <Card
                                 key = {item.id}
-                                oldPrice={price}
                                 onFavorite={(obj) => onAddToFavorite(obj)}
                                 onPlus={(obj) => onAdd(obj)}
-                                getCartPrice = {getCartPrice}
+                                getCartPrice={getCartPrice}
                                 {...item}
                             />
                         ))

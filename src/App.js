@@ -17,10 +17,11 @@ function App() {
 
     const getCartPrice = () => {
         let totalPriceFromServer = 0;
-        axios.get('https://6128cd040e3482001777b180.mockapi.io/Cart').then(
+        axios.get('http://localhost:3002/cart').then(
             res => {
                 res.data.map(item => totalPriceFromServer += item.price)
                 setPrice(totalPriceFromServer);
+                console.log(totalPriceFromServer);
             }
         );
     }
@@ -29,13 +30,12 @@ function App() {
         try {
             if (cartItems.find(cartItem => cartItem.id === obj.id)) {
                 setCartItems(prev => prev.filter(item => item.id !== obj.id));
-                console.log(obj);
-                axios.delete('https://6128cd040e3482001777b180.mockapi.io/Cart/' + obj.id);
+                axios.delete('http://localhost:3002/cart/' + obj.id);
                 getCartPrice();
             } else {
-                axios.post('https://6128cd040e3482001777b180.mockapi.io/Cart', obj);
-                console.log(obj);
+                axios.post('http://localhost:3002/cart', obj);
                 setCartItems(prev => [...prev, obj]);
+                getCartPrice();
             }
         } catch (error) {
             alert("Не удалось добавить в избранное. Ошибка " + error);
@@ -44,11 +44,10 @@ function App() {
     const onAddToFavorite = async (obj) => {
         try {
             if (favorites.find(favItem => favItem.id === obj.id)) {
-                await axios.delete('https://6128cd040e3482001777b180.mockapi.io/Favorite/' + obj.id);
+                await axios.delete('http://localhost:3003/favorite/' + obj.id);
                 setFavorites(prev => prev.filter(item => item.id !== obj.id));
             } else {
-                const {data} = await axios.post('https://6128cd040e3482001777b180.mockapi.io/Favorite', obj);
-                console.log(obj);
+                const {data} = await axios.post('http://localhost:3003/favorite', obj);
                 setFavorites(prev => [...prev, data]);
             }
         } catch (error) {
@@ -57,22 +56,21 @@ function App() {
     }
 
     const onRemoveItem = (obj) => {
-        axios.delete('https://6128cd040e3482001777b180.mockapi.io/Cart/' + obj.id);
+        axios.delete('http://localhost:3002/cart/' + obj.id);
         setCartItems(prev => prev.filter(item => item.id !== obj.id));
-
-        getCartPrice();
+        setPrice(price - obj.price);
     }
 
     React.useEffect(() => {
-        axios.get('https://6128cd040e3482001777b180.mockapi.io/items').then(res => {
+        axios.get('http://localhost:3001/sneakers').then(res => {
             setItems(res.data)
-            console.log(res.data);
+            getCartPrice();
         });
-        axios.get('https://6128cd040e3482001777b180.mockapi.io/Cart').then(res => {
+        axios.get('http://localhost:3002/cart').then(res => {
             setCartItems(res.data);
             // eslint-disable-next-line react-hooks/exhaustive-deps
         });
-        axios.get('https://6128cd040e3482001777b180.mockapi.io/Favorite').then(res => {
+        axios.get('http://localhost:3003/favorite').then(res => {
             setFavorites(res.data);
         })
     }, []);
@@ -92,7 +90,7 @@ function App() {
                 onClickCart={() => {
                     setCartOpened(true);
                 }}
-                totalPriceHeader={price}
+                price={price}
             />
 
             <Route path="/" exact>
@@ -101,18 +99,15 @@ function App() {
                     setSerchValue={setSearchValue}
                     onChangeSearchInput={onChangeSearchInput}
                     items={items}
-                    price={price}
                     onAddToFavorite={onAddToFavorite}
                     onAdd={onAdd}
-                    getCartPrice = {getCartPrice}
+                    getCartPrice={getCartPrice}
                 />
             </Route>
             <Route path="/favorites" exact>
                 <Favorites
-                    price={price}
                     onAddToFavorite={onAddToFavorite}
                     onAdd={onAdd}
-                    setPrice={setPrice}
                     items={favorites}
                 />
             </Route>
