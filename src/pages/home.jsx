@@ -1,7 +1,39 @@
 import Card from "../components/Card";
 import React from "react";
+import {AppContext} from "../App";
 
-function Home({searchValue, setSearchValue, onChangeSearchInput, items, onAddToFavorite, onAdd, getCartPrice}) {
+function Home({
+                  searchValue,
+                  setSearchValue,
+                  onChangeSearchInput,
+                  items,
+                  onAddToFavorite,
+                  onAdd,
+                  getCartPrice,
+                  isLoading,
+                  isRemove
+              }) {
+
+
+    const renderItems = () => {
+        const filteredItems = items.filter((item) =>
+            item.name.toLowerCase().includes(searchValue.toLowerCase())
+        );
+
+        return (isLoading ? [...Array(8)] : filteredItems)
+            .map((item, index) => (
+                <Card
+                    key={index}
+                    onFavorite={(obj) => onAddToFavorite(obj)}
+                    onPlus={(obj) => onAdd(obj)}
+                    getCartPrice={getCartPrice}
+                    {...item}
+                    loading={isLoading}
+                    isRemove={isRemove}
+                />
+            ))
+    }
+
     return (
         <div className="content p-40">
             <div className="d-flex align-center justify-between mb-40">
@@ -16,16 +48,7 @@ function Home({searchValue, setSearchValue, onChangeSearchInput, items, onAddToF
             </div>
             <div className="d-flex flex-wrap">
                 {
-                    items.filter((item) => item.name.toLowerCase().includes(searchValue.toLowerCase()))
-                        .map(item => (
-                            <Card
-                                key = {item.id}
-                                onFavorite={(obj) => onAddToFavorite(obj)}
-                                onPlus={(obj) => onAdd(obj)}
-                                getCartPrice={getCartPrice}
-                                {...item}
-                            />
-                        ))
+                    renderItems()
                 }
             </div>
         </div>

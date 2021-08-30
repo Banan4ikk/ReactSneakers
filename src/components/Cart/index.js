@@ -1,10 +1,10 @@
 import styles from './Cart.module.scss'
+import React from "react";
+import {AppContext} from "../../App";
 
 
 function Cart({onClickClose, items = [], onRemove}) {
-    let totalPrice = 0;
-
-    items.length > 0 ? items.map(item => totalPrice += item.price) : totalPrice = 0;
+    const {price} = React.useContext(AppContext);
 
     return (
         <div className={styles.overlay} style={{position: "fixed"}}>
@@ -35,12 +35,12 @@ function Cart({onClickClose, items = [], onRemove}) {
                                     <li>
                                         <span>Итого</span>
                                         <div></div>
-                                        <b>{totalPrice} руб.</b>
+                                        <b>{price} руб.</b>
                                     </li>
                                     <li>
                                         <span>Налог 5%</span>
                                         <div></div>
-                                        <b>{Math.round(totalPrice / 100 * 5)} руб.</b>
+                                        <b>{Math.round(price / 100 * 5)} руб.</b>
                                     </li>
                                 </ul>
                                 <button className={styles.greenButton}>Оформить заказ <img src={"images/arrow.svg"}/>

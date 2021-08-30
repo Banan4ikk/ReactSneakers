@@ -6,14 +6,18 @@ import Home from "./pages/home";
 import Favorites from "./pages/Favorites";
 import axios from "axios";
 
+export const AppContext = React.createContext({});
+
 function App() {
 
     const [items, setItems] = React.useState([]);
     const [favorites, setFavorites] = React.useState([]);
     const [cartItems, setCartItems] = React.useState([]);
     const [cartOpened, setCartOpened] = React.useState(false);
-    const [price, setPrice] = React.useState(0);
+    const [isLoading, setIsLoading] = React.useState(true);
+    const [isRemovePressed, setIsRemovePressed] = React.useState(false);
     const [searchValue, setSearchValue] = React.useState('');
+    const [price, setPrice] = React.useState(0);
 
     const getCartPrice = () => {
         let totalPriceFromServer = 0;
@@ -59,60 +63,74 @@ function App() {
         axios.delete('http://localhost:3002/cart/' + obj.id);
         setCartItems(prev => prev.filter(item => item.id !== obj.id));
         setPrice(price - obj.price);
+        setIsRemovePressed(true);
     }
 
     React.useEffect(() => {
-        axios.get('http://localhost:3001/sneakers').then(res => {
-            setItems(res.data)
-            getCartPrice();
-        });
-        axios.get('http://localhost:3002/cart').then(res => {
-            setCartItems(res.data);
-            // eslint-disable-next-line react-hooks/exhaustive-deps
-        });
-        axios.get('http://localhost:3003/favorite').then(res => {
-            setFavorites(res.data);
-        })
+        async function getData() {
+            const cartResponse = await axios.get('http://localhost:3002/cart')
+            const favoriteResponse = await axios.get('http://localhost:3003/favorite')
+            const itemsResponse = await axios.get('http://localhost:3001/sneakers')
+
+            setIsLoading(false);
+
+            setCartItems(cartResponse.data);
+            setFavorites(favoriteResponse.data);
+            setItems(itemsResponse.data);
+            getCartPrice()
+        }
+
+        getData();
     }, []);
     const onChangeSearchInput = (event) => {
         setSearchValue(event.target.value);
     }
+
+    const isItemAdded = (id) => {
+       return  cartItems.some(obj => obj.id === id)
+    }
+
     return (
-        <div className="wrapper clear">
-            {cartOpened && <Cart
-                onClickClose={() => {
-                    setCartOpened(false)
-                }}
-                items={cartItems}
-                onRemove={onRemoveItem}
-            />}
-            <Header
-                onClickCart={() => {
-                    setCartOpened(true);
-                }}
-                price={price}
-            />
-
-            <Route path="/" exact>
-                <Home
-                    searchValue={searchValue}
-                    setSerchValue={setSearchValue}
-                    onChangeSearchInput={onChangeSearchInput}
-                    items={items}
-                    onAddToFavorite={onAddToFavorite}
-                    onAdd={onAdd}
-                    getCartPrice={getCartPrice}
+        <AppContext.Provider value={{items, cartItems, favorites, price, isItemAdded}}>
+            <div className="wrapper clear">
+                {cartOpened && <Cart
+                    onClickClose={() => {
+                        setCartOpened(false)
+                    }}
+                    items={cartItems}
+                    onRemove={onRemoveItem}
+                />}
+                <Header
+                    onClickCart={() => {
+                        setCartOpened(true);
+                    }}
+                    price={price}
                 />
-            </Route>
-            <Route path="/favorites" exact>
-                <Favorites
-                    onAddToFavorite={onAddToFavorite}
-                    onAdd={onAdd}
-                    items={favorites}
-                />
-            </Route>
 
-        </div>
+                <Route path="/" exact>
+                    <Home
+                        searchValue={searchValue}
+                        setSerchValue={setSearchValue}
+                        cartItems={cartItems}
+                        onChangeSearchInput={onChangeSearchInput}
+                        items={items}
+                        onAddToFavorite={onAddToFavorite}
+                        onAdd={onAdd}
+                        getCartPrice={getCartPrice}
+                        isLoading={isLoading}
+                        isRemove={isRemovePressed}
+                    />
+                </Route>
+                <Route path="/favorites" exact>
+                    <Favorites
+                        onAddToFavorite={onAddToFavorite}
+                        onAdd={onAdd}
+                        items={favorites}
+                    />
+                </Route>
+
+            </div>
+        </AppContext.Provider>
     );
 }
 
