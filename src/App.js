@@ -17,29 +17,17 @@ function App() {
     const [isLoading, setIsLoading] = React.useState(true);
     const [isRemovePressed, setIsRemovePressed] = React.useState(false);
     const [searchValue, setSearchValue] = React.useState('');
-    const [price, setPrice] = React.useState(0);
 
-    const updateCartPrice = () => {
-        let totalPriceFromServer = 0;
-        axios.get('http://localhost:3001/cart').then(
-            res => {
-                res.data.map(item => totalPriceFromServer += item.price)
-                setPrice(totalPriceFromServer);
-                console.log(totalPriceFromServer);
-            }
-        );
-    }
+
 
     const onAdd = (obj) => {
         try {
             if (cartItems.find(cartItem => cartItem.id === obj.id)) {
                 setCartItems(prev => prev.filter(item => item.id !== obj.id));
                 axios.delete('http://localhost:3001/cart/' + obj.id);
-                updateCartPrice();
             } else {
                 axios.post('http://localhost:3001/cart', obj);
                 setCartItems(prev => [...prev, obj]);
-                updateCartPrice();
             }
         } catch (error) {
             alert("Не удалось добавить в избранное. Ошибка " + error);
@@ -62,7 +50,6 @@ function App() {
     const onRemoveItem = (obj) => {
         axios.delete('http://localhost:3001/cart/' + obj.id);
         setCartItems(prev => prev.filter(item => item.id !== obj.id));
-        setPrice(price - obj.price);
         setIsRemovePressed(true);
     }
 
@@ -77,7 +64,6 @@ function App() {
             setCartItems(cartResponse.data);
             setFavorites(favoriteResponse.data);
             setItems(itemsResponse.data);
-            updateCartPrice()
         }
 
         getData();
@@ -95,14 +81,11 @@ function App() {
             items,
             cartItems,
             favorites,
-            price,
             isItemAdded,
             setCartOpened,
             setCartItems,
-            updateCartPrice,
             isLoading,
             setIsLoading,
-            setPrice
         }}>
             <div className="wrapper clear">
                 {cartOpened && <Cart
@@ -116,7 +99,6 @@ function App() {
                     onClickCart={() => {
                         setCartOpened(true);
                     }}
-                    price={price}
                 />
 
                 <Route path="/" exact>

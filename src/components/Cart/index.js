@@ -3,23 +3,23 @@ import React from "react";
 import Info from "../Info";
 import {AppContext} from "../../App";
 import axios from "axios";
+import {useCart} from "../../hooks/useCart";
 
 
 function Cart({onClickClose, items = [], onRemove}) {
-    const {price, setCartItems, cartItems, isLoading, setIsLoading, setPrice} = React.useContext(AppContext);
+    const {isLoading, setIsLoading} = React.useContext(AppContext);
 
     const [isCompleted, setIsCompleted] = React.useState(false);
+    const { cartItems, setCartItems, totalPrice } = useCart()
+
     let orderID = 1;
 
     const onClickOrder = async () => {
 
         try {
-            setPrice(0);
             setIsLoading(true);
             const {data} = await axios.post('http://localhost:3001/order', {items: cartItems})
-            cartItems.map(item => {
-                axios.delete('http://localhost:3001/cart/' + item.id)
-            })
+            cartItems.map(item => axios.delete('http://localhost:3001/cart/' + item.id))
             setIsCompleted(true);
             setCartItems([]);
 
@@ -60,12 +60,12 @@ function Cart({onClickClose, items = [], onRemove}) {
                                     <li>
                                         <span>Итого</span>
                                         <div></div>
-                                        <b>{price} руб.</b>
+                                        <b>{totalPrice} руб.</b>
                                     </li>
                                     <li>
                                         <span>Налог 5%</span>
                                         <div></div>
-                                        <b>{Math.round(price / 100 * 5)} руб.</b>
+                                        <b>{Math.round(totalPrice * 0.05)} руб.</b>
                                     </li>
                                 </ul>
                                 <button disabled={isLoading} className={styles.greenButton}
