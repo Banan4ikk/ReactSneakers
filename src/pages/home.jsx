@@ -1,7 +1,5 @@
 import Card from "../components/Card";
 import React from "react";
-import {AppContext} from "../App";
-
 function Home({
                   searchValue,
                   setSearchValue,
@@ -9,7 +7,6 @@ function Home({
                   items,
                   onAddToFavorite,
                   onAdd,
-                  getCartPrice,
                   isLoading,
                   isRemove
               }) {
@@ -26,7 +23,6 @@ function Home({
                     key={index}
                     onFavorite={(obj) => onAddToFavorite(obj)}
                     onPlus={(obj) => onAdd(obj)}
-                    getCartPrice={getCartPrice}
                     {...item}
                     loading={isLoading}
                     isRemove={isRemove}

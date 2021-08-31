@@ -1,10 +1,34 @@
 import styles from './Cart.module.scss'
 import React from "react";
+import Info from "../Info";
 import {AppContext} from "../../App";
+import axios from "axios";
 
 
 function Cart({onClickClose, items = [], onRemove}) {
-    const {price} = React.useContext(AppContext);
+    const {price, setCartItems, cartItems, isLoading, setIsLoading, setPrice} = React.useContext(AppContext);
+
+    const [isCompleted, setIsCompleted] = React.useState(false);
+    let orderID = 1;
+
+    const onClickOrder = async () => {
+
+        try {
+            setPrice(0);
+            setIsLoading(true);
+            const {data} = await axios.post('http://localhost:3001/order', {items: cartItems})
+            cartItems.map(item => {
+                axios.delete('http://localhost:3001/cart/' + item.id)
+            })
+            setIsCompleted(true);
+            setCartItems([]);
+
+        } catch (error) {
+            alert("Ошибка при создании заказа")
+        } finally {
+            setIsLoading(false);
+        }
+    }
 
     return (
         <div className={styles.overlay} style={{position: "fixed"}}>
@@ -14,7 +38,7 @@ function Cart({onClickClose, items = [], onRemove}) {
                                                                             onClick={onClickClose}/></h2>
                 {
                     items.length > 0 ?
-                        <div className="RELATIVE">
+                        <div className="d-flex flex-column flex">
                             <div className={styles.Items} style={{flex: 1}}>
                                 {
                                     items.map(item => (
@@ -24,7 +48,8 @@ function Cart({onClickClose, items = [], onRemove}) {
                                                     <p className="sneakers-info mb-5">{item.name}</p>
                                                     <b>{item.price} Руб.</b>
                                                 </div>
-                                                <img className={styles.deleteItem} onClick={() => onRemove(item)} src="images/deleteCart.svg"/>
+                                                <img className={styles.deleteItem} onClick={() => onRemove(item)}
+                                                     src="images/deleteCart.svg"/>
                                             </div>
                                         )
                                     )
@@ -43,20 +68,21 @@ function Cart({onClickClose, items = [], onRemove}) {
                                         <b>{Math.round(price / 100 * 5)} руб.</b>
                                     </li>
                                 </ul>
-                                <button className={styles.greenButton}>Оформить заказ <img src={"images/arrow.svg"}/>
+                                <button disabled={isLoading} className={styles.greenButton}
+                                        onClick={onClickOrder}> Оформить заказ <img
+                                    src={"images/arrow.svg"}/>
                                 </button>
                             </div>
                         </div>
                         :
-                        <div className={styles.cartEmpty}>
-                            <img className="mb-20" src="./images/empty-cart.jpg" style={{width: 120, height: 120}}/>
-                            <h2> Коризна пустая</h2>
-                            <p className="opacity-6"> Добавьте хотя бы одну пару кроссовок чтобы сделать заказ</p>
-                            <button className={styles.greenButton} onClick={onClickClose}>
-                                <img src="./images/arrow.svg" alt="arrow"/>
-                                Вернуться назад
-                            </button>
-                        </div>
+                        <Info
+                            title={isCompleted ? "Заказ оформлен" : "Корзина пустая"}
+                            description={
+                                isCompleted ? "Ваш заказ #" + orderID++ + " скоро будет передан курьерской доставке"
+                                    : "Добавьте хотя бы одну пару кроссовок, чтобы сделать заказ."
+                            }
+                            image={isCompleted ? "./images/ordered.jpg" : "./images/empty-cart.jpg"}
+                        />
                 }
             </div>
         </div>

@@ -19,9 +19,9 @@ function App() {
     const [searchValue, setSearchValue] = React.useState('');
     const [price, setPrice] = React.useState(0);
 
-    const getCartPrice = () => {
+    const updateCartPrice = () => {
         let totalPriceFromServer = 0;
-        axios.get('http://localhost:3002/cart').then(
+        axios.get('http://localhost:3001/cart').then(
             res => {
                 res.data.map(item => totalPriceFromServer += item.price)
                 setPrice(totalPriceFromServer);
@@ -34,12 +34,12 @@ function App() {
         try {
             if (cartItems.find(cartItem => cartItem.id === obj.id)) {
                 setCartItems(prev => prev.filter(item => item.id !== obj.id));
-                axios.delete('http://localhost:3002/cart/' + obj.id);
-                getCartPrice();
+                axios.delete('http://localhost:3001/cart/' + obj.id);
+                updateCartPrice();
             } else {
-                axios.post('http://localhost:3002/cart', obj);
+                axios.post('http://localhost:3001/cart', obj);
                 setCartItems(prev => [...prev, obj]);
-                getCartPrice();
+                updateCartPrice();
             }
         } catch (error) {
             alert("Не удалось добавить в избранное. Ошибка " + error);
@@ -48,10 +48,10 @@ function App() {
     const onAddToFavorite = async (obj) => {
         try {
             if (favorites.find(favItem => favItem.id === obj.id)) {
-                await axios.delete('http://localhost:3003/favorite/' + obj.id);
+                await axios.delete('http://localhost:3001/favorite/' + obj.id);
                 setFavorites(prev => prev.filter(item => item.id !== obj.id));
             } else {
-                const {data} = await axios.post('http://localhost:3003/favorite', obj);
+                const {data} = await axios.post('http://localhost:3001/favorite', obj);
                 setFavorites(prev => [...prev, data]);
             }
         } catch (error) {
@@ -60,7 +60,7 @@ function App() {
     }
 
     const onRemoveItem = (obj) => {
-        axios.delete('http://localhost:3002/cart/' + obj.id);
+        axios.delete('http://localhost:3001/cart/' + obj.id);
         setCartItems(prev => prev.filter(item => item.id !== obj.id));
         setPrice(price - obj.price);
         setIsRemovePressed(true);
@@ -68,8 +68,8 @@ function App() {
 
     React.useEffect(() => {
         async function getData() {
-            const cartResponse = await axios.get('http://localhost:3002/cart')
-            const favoriteResponse = await axios.get('http://localhost:3003/favorite')
+            const cartResponse = await axios.get('http://localhost:3001/cart')
+            const favoriteResponse = await axios.get('http://localhost:3001/favorite')
             const itemsResponse = await axios.get('http://localhost:3001/sneakers')
 
             setIsLoading(false);
@@ -77,7 +77,7 @@ function App() {
             setCartItems(cartResponse.data);
             setFavorites(favoriteResponse.data);
             setItems(itemsResponse.data);
-            getCartPrice()
+            updateCartPrice()
         }
 
         getData();
@@ -87,11 +87,23 @@ function App() {
     }
 
     const isItemAdded = (id) => {
-       return  cartItems.some(obj => obj.id === id)
+        return cartItems.some(obj => obj.id === id)
     }
 
     return (
-        <AppContext.Provider value={{items, cartItems, favorites, price, isItemAdded}}>
+        <AppContext.Provider value={{
+            items,
+            cartItems,
+            favorites,
+            price,
+            isItemAdded,
+            setCartOpened,
+            setCartItems,
+            updateCartPrice,
+            isLoading,
+            setIsLoading,
+            setPrice
+        }}>
             <div className="wrapper clear">
                 {cartOpened && <Cart
                     onClickClose={() => {
@@ -116,7 +128,6 @@ function App() {
                         items={items}
                         onAddToFavorite={onAddToFavorite}
                         onAdd={onAdd}
-                        getCartPrice={getCartPrice}
                         isLoading={isLoading}
                         isRemove={isRemovePressed}
                     />

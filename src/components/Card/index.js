@@ -9,7 +9,6 @@ function Card({
                   img,
                   name,
                   price,
-                  getCartPrice,
                   onFavorite,
                   favorite = false,
                   id,
@@ -17,12 +16,12 @@ function Card({
               }) {
 
     const [isFavorite, setIsFavorite] = React.useState(favorite);
-    const {isItemAdded} = React.useContext(AppContext);
+    const {isItemAdded, updateCartPrice} = React.useContext(AppContext);
 
 
     const onClickPlus = () => {
         onPlus({img, name, price, id});
-        getCartPrice();
+        updateCartPrice();
     }
 
     const onClickFavorite = () => {
