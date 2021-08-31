@@ -1,3 +1,10 @@
+.overlayHidden {
+  visibility: hidden;
+  opacity: 0;
+  transform: translateX(100%);
+  overflow: hidden;
+}
+
 .overlay {
   position: absolute;
   width: 100%;
@@ -6,6 +13,11 @@
   top: 0;
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 1;
+  visibility: visible;
+  opacity: 1;
+  transform: translateX(0%);
+  transition: transform 0.3s ease-in-out;
+  overflow: hidden;
 
   .greenButton {
     width: 100%;
@@ -20,21 +32,23 @@
     transition: background 0.2s ease-in-out;
 
     @keyframes button-loading {
-      0%{
+      0% {
         opacity: 1;
       }
-      50%{
+      50% {
         opacity: 0.7;
       }
-      100%{
+      100% {
         opacity: 1;
       }
     }
-    &:disabled{
+
+    &:disabled {
       background: #bebebe;
       cursor: default;
       animation: button-loading 1s ease-in-out infinite;
     }
+
     &:hover {
       background: lighten(#9dd558, 10%);
     }
@@ -148,6 +162,7 @@
       width: 280px;
       line-height: 24px;
     }
+
     .greenButton {
       width: 245px;
       margin-top: 20px;

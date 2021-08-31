@@ -5,6 +5,7 @@ import Header from './components/Header'
 import Home from "./pages/home";
 import Favorites from "./pages/Favorites";
 import axios from "axios";
+import Orders from "./pages/Orders";
 
 export const AppContext = React.createContext({});
 
@@ -18,13 +19,11 @@ function App() {
     const [isRemovePressed, setIsRemovePressed] = React.useState(false);
     const [searchValue, setSearchValue] = React.useState('');
 
-
-
     const onAdd = (obj) => {
         try {
             if (cartItems.find(cartItem => cartItem.id === obj.id)) {
                 setCartItems(prev => prev.filter(item => item.id !== obj.id));
-                axios.delete('http://localhost:3001/cart/' + obj.id);
+                axios.delete(`http://localhost:3001/cart/${obj.id}`);
             } else {
                 axios.post('http://localhost:3001/cart', obj);
                 setCartItems(prev => [...prev, obj]);
@@ -36,7 +35,7 @@ function App() {
     const onAddToFavorite = async (obj) => {
         try {
             if (favorites.find(favItem => favItem.id === obj.id)) {
-                await axios.delete('http://localhost:3001/favorite/' + obj.id);
+                await axios.delete(`http://localhost:3001/favorite/${obj.id}`);
                 setFavorites(prev => prev.filter(item => item.id !== obj.id));
             } else {
                 const {data} = await axios.post('http://localhost:3001/favorite', obj);
@@ -48,7 +47,7 @@ function App() {
     }
 
     const onRemoveItem = (obj) => {
-        axios.delete('http://localhost:3001/cart/' + obj.id);
+        axios.delete(`http://localhost:3001/cart/${obj.id}`);
         setCartItems(prev => prev.filter(item => item.id !== obj.id));
         setIsRemovePressed(true);
     }
@@ -86,18 +85,23 @@ function App() {
             setCartItems,
             isLoading,
             setIsLoading,
+            onAddToFavorite,
+            onAdd,
+            cartOpened
         }}>
             <div className="wrapper clear">
-                {cartOpened && <Cart
+                <Cart
                     onClickClose={() => {
                         setCartOpened(false)
                     }}
                     items={cartItems}
                     onRemove={onRemoveItem}
-                />}
+                    opened = {cartOpened}
+                />
                 <Header
                     onClickCart={() => {
                         setCartOpened(true);
+                        console.log(cartOpened)
                     }}
                 />
 
@@ -108,8 +112,6 @@ function App() {
                         cartItems={cartItems}
                         onChangeSearchInput={onChangeSearchInput}
                         items={items}
-                        onAddToFavorite={onAddToFavorite}
-                        onAdd={onAdd}
                         isLoading={isLoading}
                         isRemove={isRemovePressed}
                     />
@@ -122,6 +124,9 @@ function App() {
                     />
                 </Route>
 
+                <Route path="/orders">
+                    <Orders/>
+                </Route>
             </div>
         </AppContext.Provider>
     );

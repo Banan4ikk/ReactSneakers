@@ -3,7 +3,7 @@ import {Link} from "react-router-dom";
 import {useCart} from "../hooks/useCart";
 
 function Header(props) {
-   const {totalPrice} = useCart()
+    const {totalPrice} = useCart()
 
     return (
         <header className="d-flex justify-between align-center p-40">
@@ -28,7 +28,9 @@ function Header(props) {
                         </Link>
                     </li>
                     <li>
-                        <img width={18} height={18} src="images/user.svg"/>
+                        <Link style={{cursor: "pointer"}} to="/orders">
+                            <img width={18} height={18} src="images/user.svg"/>
+                        </Link>
                     </li>
                 </ul>
             </div>

@@ -1,28 +1,26 @@
-import styles from './Cart.module.scss'
 import React from "react";
-import Info from "../Info";
-import {AppContext} from "../../App";
 import axios from "axios";
+import {AppContext} from "../../App";
+import styles from './Cart.module.scss'
+import Info from "../Info";
 import {useCart} from "../../hooks/useCart";
 
 
-function Cart({onClickClose, items = [], onRemove}) {
+function Cart({onClickClose, items = [], onRemove, opened}) {
     const {isLoading, setIsLoading} = React.useContext(AppContext);
 
     const [isCompleted, setIsCompleted] = React.useState(false);
+    const [orderId, setOrderId] = React.useState(1);
     const { cartItems, setCartItems, totalPrice } = useCart()
 
-    let orderID = 1;
-
     const onClickOrder = async () => {
-
         try {
             setIsLoading(true);
             const {data} = await axios.post('http://localhost:3001/order', {items: cartItems})
-            cartItems.map(item => axios.delete('http://localhost:3001/cart/' + item.id))
+            setOrderId(data.id);
+            cartItems.map(item => axios.delete(`http://localhost:3001/cart/${item.id}`))
             setIsCompleted(true);
             setCartItems([]);
-
         } catch (error) {
             alert("Ошибка при создании заказа")
         } finally {
@@ -31,7 +29,7 @@ function Cart({onClickClose, items = [], onRemove}) {
     }
 
     return (
-        <div className={styles.overlay} style={{position: "fixed"}}>
+        <div className={opened? styles.overlay : styles.overlayHidden} style={{position: "fixed"}}>
             <div className={styles.cart}>
                 <h2 className={"mb-30 d-flex justify-between"}>Корзина <img className={styles.deleteItem}
                                                                             src="images/deleteCart.svg"
@@ -78,7 +76,7 @@ function Cart({onClickClose, items = [], onRemove}) {
                         <Info
                             title={isCompleted ? "Заказ оформлен" : "Корзина пустая"}
                             description={
-                                isCompleted ? "Ваш заказ #" + orderID++ + " скоро будет передан курьерской доставке"
+                                isCompleted ? "Ваш заказ #" + orderId + " скоро будет передан курьерской доставке"
                                     : "Добавьте хотя бы одну пару кроссовок, чтобы сделать заказ."
                             }
                             image={isCompleted ? "./images/ordered.jpg" : "./images/empty-cart.jpg"}

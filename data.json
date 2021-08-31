@@ -56,109 +56,50 @@
     }
   ],
   "order": [
-    [
-      {
-        "img": "./images/sneakers/4.jpg",
-        "name": "Мужские Кроссовки Under Armour Curry 8",
-        "price": 15199,
-        "id": "4"
-      }
-    ],
-    [
-      {
-        "img": "./images/sneakers/4.jpg",
-        "name": "Мужские Кроссовки Under Armour Curry 8",
-        "price": 15199,
-        "id": "4"
-      }
-    ],
     {
       "items": [
+        {
+          "img": "./images/sneakers/3.jpg",
+          "name": "Мужские Кроссовки Nike Blazer Mid Suede",
+          "price": 8490,
+          "id": "3"
+        },
         {
           "img": "./images/sneakers/4.jpg",
           "name": "Мужские Кроссовки Under Armour Curry 8",
           "price": 15199,
           "id": "4"
+        }
+      ],
+      "id": 1
+    },
+    {
+      "items": [
+        {
+          "img": "./images/sneakers/3.jpg",
+          "name": "Мужские Кроссовки Nike Blazer Mid Suede",
+          "price": 8490,
+          "id": "3"
+        },
+        {
+          "img": "./images/sneakers/2.jpg",
+          "name": "Мужские Кроссовки Nike Air Max 270",
+          "price": 12999,
+          "id": "2"
+        }
+      ],
+      "id": 2
+    },
+    {
+      "items": [
+        {
+          "img": "./images/sneakers/3.jpg",
+          "name": "Мужские Кроссовки Nike Blazer Mid Suede",
+          "price": 8490,
+          "id": "3"
         }
       ],
       "id": 3
-    },
-    {
-      "items": [
-        {
-          "img": "./images/sneakers/3.jpg",
-          "name": "Мужские Кроссовки Nike Blazer Mid Suede",
-          "price": 8490,
-          "id": "3"
-        }
-      ],
-      "id": 4
-    },
-    {
-      "items": [
-        {
-          "img": "./images/sneakers/4.jpg",
-          "name": "Мужские Кроссовки Under Armour Curry 8",
-          "price": 15199,
-          "id": "4"
-        }
-      ],
-      "id": 5
-    },
-    {
-      "items": [
-        {
-          "img": "./images/sneakers/4.jpg",
-          "name": "Мужские Кроссовки Under Armour Curry 8",
-          "price": 15199,
-          "id": "4"
-        }
-      ],
-      "id": 6
-    },
-    {
-      "items": [
-        {
-          "img": "./images/sneakers/2.jpg",
-          "name": "Мужские Кроссовки Nike Air Max 270",
-          "price": 12999,
-          "id": "2"
-        }
-      ],
-      "id": 7
-    },
-    {
-      "items": [
-        {
-          "img": "./images/sneakers/3.jpg",
-          "name": "Мужские Кроссовки Nike Blazer Mid Suede",
-          "price": 8490,
-          "id": "3"
-        }
-      ],
-      "id": 8
-    },
-    {
-      "items": [
-        {
-          "img": "./images/sneakers/2.jpg",
-          "name": "Мужские Кроссовки Nike Air Max 270",
-          "price": 12999,
-          "id": "2"
-        }
-      ],
-      "id": 9
-    },
-    {
-      "items": [
-        {
-          "img": "./images/sneakers/2.jpg",
-          "name": "Мужские Кроссовки Nike Air Max 270",
-          "price": 12999,
-          "id": "2"
-        }
-      ],
-      "id": 10
     }
   ],
   "favorite": [
